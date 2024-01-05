@@ -10,12 +10,15 @@ Centos: centos-7-x64
 
 Ubuntu: ubuntu-23-10-x64
 
+
 -- INSTRUCTIONS --
 1. Add your machine SSH to DigitalOcean account
 2. Update hosts file position
+   
    a) ansible_ssh_private_key_file (path to your public ssh file)
-3. Create API token and add to your DigitalOcean project
-4. Update vars files to your personal preferences
+4. Create API token and add to your DigitalOcean project
+5. Update vars files to your personal preferences
+   
    a) Update u_token in Connection vars (api_token)
    
    b) Update u_ssh in Connection vars (ssh fingerprint)
@@ -23,6 +26,7 @@ Ubuntu: ubuntu-23-10-x64
    c) Update hosts_dest with your actual path to the hosts file (you can use pwd)
    
    d) Update ad_domain, realm_name and users with your personal preference
+
 
 
 -- RUN INSTRUCTIONS --
@@ -37,6 +41,8 @@ Ubuntu: ubuntu-23-10-x64
 5. Run app.yml: ansible-playbook -i hosts.ini app.yml
    
    This Playbook installs required packages to join AD, joins AD server and adds recently created network directory
+
+
 
 -- Droplet Delete --
 If you would like to delete droplet, simply switch both states of "Create Digitalocean droplet" from PRESENT to ABSENT and run playbook.
