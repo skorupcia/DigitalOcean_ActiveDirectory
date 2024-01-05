@@ -45,6 +45,9 @@ Ubuntu: ubuntu-23-10-x64
 If you would like to delete droplet, simply switch both states of "Create Digitalocean droplet" from PRESENT to ABSENT and run playbook.
 
 -- Links --
+
 https://askubuntu.com/questions/1109923/18-04-joining-ad-problems
+
 https://zerosandones.us/2023/01/06/join-linux-to-active-directory/
+
 https://computingforgeeks.com/join-ubuntu-debian-to-active-directory-ad-domain/
