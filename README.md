@@ -5,7 +5,9 @@ DigitalOcean ActiveDirectory with Centos-7 and Ubuntu
 This repository also contains VagrantFile, with little adjustments you can try this on local environment.
 
 macOS: Sonoma 14.2.1
+
 Centos: centos-7-x64
+
 Ubuntu: ubuntu-23-10-x64
 
 -- INSTRUCTIONS --
@@ -15,8 +17,11 @@ Ubuntu: ubuntu-23-10-x64
 3. Create API token and add to your DigitalOcean project
 4. Update vars files to your personal preferences
    a) Update u_token in Connection vars (api_token)
+   
    b) Update u_ssh in Connection vars (ssh fingerprint)
+   
    c) Update hosts_dest with your actual path to the hosts file (you can use pwd)
+   
    d) Update ad_domain, realm_name and users with your personal preference
 
 
