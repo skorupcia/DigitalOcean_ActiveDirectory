@@ -1,0 +1,85 @@
+---
+- hosts: locals
+  connection: local
+
+  vars_files:
+    - vars/connection_vars.yml
+
+  tasks:
+  - name: Create AD Server
+    community.digitalocean.digital_ocean_droplet:
+      state: present
+      oauth_token: "{{ u_token }}"
+      name: adserver
+      private_networking: true
+      size: s-1vcpu-512mb-10gb
+      image: centos-7-x64
+      region: fra1
+      ssh_keys: "{{ u_ssh }}"
+      unique_name: true
+    register: do_ad_server
+
+  - name: Create AD user
+    community.digitalocean.digital_ocean_droplet:
+      state: present
+      oauth_token: "{{ u_token }}"
+      name: aduser
+      private_networking: true
+      size: s-1vcpu-512mb-10gb
+      image: ubuntu-23-10-x64
+      region: fra1
+      ssh_keys: "{{ u_ssh }}"
+      unique_name: true
+    register: do_ad_user
+
+  - name: Get DigitalOcean API Token
+    set_fact:
+      do_token: "{{ u_token }}"
+
+  - name: Get Droplet Information
+    uri:
+      url: "https://api.digitalocean.com/v2/droplets"
+      method: GET
+      headers:
+        Authorization: "Bearer {{ do_token }}"
+      return_content: yes
+    register: droplets
+
+  - name: Extract Droplet IP
+    set_fact:
+      droplet_ip: "{{ droplets.json.droplets[0].networks.v4[1].ip_address }}"
+      droplet_ip2: "{{ droplets.json.droplets[1].networks.v4[1].ip_address }}"
+
+  - name: Add adserver ip to Inventory
+    lineinfile:
+      dest: "{{ hosts_dest }}"
+      line: "{{ droplet_ip }} ansible_connection=ssh ansible_user=root"
+      insertbefore: BOF  # adding line to the beginning of the file
+    when: droplet_ip is defined
+
+  - name: Add [ad] group header
+    lineinfile:
+      path: "{{ hosts_dest }}"
+      line: "[ad]"
+      insertbefore: BOF
+    when: droplet_ip is defined
+
+  - name: Add app ip to Inventory
+    lineinfile:
+      dest: "{{ hosts_dest }}"
+      line: "{{ droplet_ip2 }} ansible_connection=ssh ansible_python_interpreter=/usr/bin/python3 ansible_user=root"
+      insertbefore: BOF  # adding line to the beginning of the file
+    when: droplet_ip2 is defined
+
+  - name: Add [app] group header
+    lineinfile:
+      path: "{{ hosts_dest }}"
+      line: "[app]"
+      insertbefore: BOF
+    when: droplet_ip2 is defined
+
+  - name: Create ip_vars.yml
+    lineinfile:
+      path: vars/ip_vars.yml
+      line: "ad_ip: {{ droplet_ip }}\nuser1_ip: {{ droplet_ip2 }}"
+      create: yes

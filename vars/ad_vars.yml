@@ -1,0 +1,9 @@
+#AD Vars
+ad_domain: adserver.com
+realm_name: adserver
+
+ad_admin: administrator
+ad_admin_p: pa$$word
+
+ad_user1: user1 
+ad_user1_p: strpa$$

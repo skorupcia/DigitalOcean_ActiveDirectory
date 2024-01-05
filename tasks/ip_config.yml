@@ -1,0 +1,87 @@
+---
+- name: Adding hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ ad_ip }} {{ ad_domain }} \n{{ user1_ip }} {{ ad_domain }}"
+
+- name: adding hostname to /etc/hostname
+  lineinfile:
+    path: /etc/hostname
+    line: "{{ ad_domain }}"
+
+- name: RM 99-cloud-init.conf file
+  file:
+    path: /etc/NetworkManager/conf.d/99-cloud-init.conf
+    state: absent
+
+- name: Create file and add contents
+  ini_file:
+    path: /etc/NetworkManager/conf.d/99-cloud-init.conf
+    section: main
+    option: dns
+    value: default
+
+- name: Backup krb5.conf
+  copy:
+    src: /etc/krb5.conf
+    dest: /etc/krb5.conf.bak
+    remote_src: yes
+    backup: yes
+
+- name: Remove existing krb5.conf
+  file:
+    path: /etc/krb5.conf
+    state: absent
+
+- name: Create new krb5.conf with configuration
+  blockinfile:
+    path: /etc/krb5.conf
+    create: yes
+    block: |
+      [libdefaults]
+      default_realm = "{{ realm_name }}"
+      dns_lookup_realm = false
+      dns_lookup_kdc = false
+      default_ccache_name = KEYRING:persistent:%{uid}
+      rdns = false
+      ticket_lifetime = 24h
+      renew_lifetime = 7d
+      forwardable = true
+
+      [realms]
+      "{{ realm_name }}" = {
+        kdc = your.realm.name
+        admin_server = your.realm.name
+      }
+
+      [domain_realm]
+      your.realm.name = "{{ realm_name }}"
+      .your.realm.name = "{{ realm_name }}"
+
+- name: create sssd.conf
+  blockinfile:
+    path: /etc/sssd/sssd.conf
+    create: yes
+    block: |
+      [sssd]
+      domains = "{{ realm_name }}"
+      config_file_version = 2
+      services = nss, pam
+
+      [domain/"{{ ad_domain }}"]
+      ad_domain = "{{ ad_domain }}"
+      krb5_realm = "{{ ad_domain }}"
+      realmd_tags = manages-system joined-with-adcli 
+      cache_credentials = True
+      id_provider = ad
+      krb5_store_password_if_offline = True
+      default_shell = /bin/bash
+      ldap_id_mapping = True
+      use_fully_qualified_names = True
+      fallback_homedir = /home/%u@%d
+      access_provider = ad
+
+- name: Add domain and nameservers to /etc/resolv.conf (DNS)
+  lineinfile:
+    path: /etc/resolv.conf
+    line: "domain {{ ad_domain }} \nnameserver {{ ad_ip }}\nnameserver {{ user1_ip }}"

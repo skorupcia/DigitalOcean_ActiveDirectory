@@ -1,0 +1,4 @@
+# Connection vars
+u_token: YOUR_API_TOKEN
+u_ssh: YOUR_SSH_FINGERPRINT
+hosts_dest: YOUR_hosts_FILE_DESTINATION

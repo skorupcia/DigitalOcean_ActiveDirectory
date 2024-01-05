@@ -1,0 +1,43 @@
+---
+- hosts: app 
+  connection: ssh
+
+  vars_files:
+    - vars/ad_vars.yml
+
+  tasks:
+    - name: Install packages
+      ansible.builtin.package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - realmd
+        - sssd
+        - oddjob
+        - dnsmasq
+
+    - name: Join AD
+      ansible.builtin.command: >
+        realm join --user={{ ad_user }} {{ ad_domain }}
+      args:
+        chdir: /
+        creates: "/etc/krb5.keytab"
+      register: join_r
+
+    - name: Check join
+      ansible.builtin.debug:
+        var: join_r
+
+    - name: Enable and start oddjobd
+      ansible.builtin.systemd:
+        name: oddjobd
+        enabled: yes
+        state: started
+
+    - name: Create network folder
+      ansible.builtin.file:
+        path: "/home/AD_FOLDER"
+        state: directory
+        owner: "{{ ad_user }}"
+        group: "{{ ad_user }}"
+        mode: 0755

@@ -1,0 +1,54 @@
+---
+- hosts: ad
+  connection: ssh
+
+  vars_files:
+    - vars/ad_vars.yml
+    - vars/connection_vars.yml
+    - vars/ip_vars.yml
+
+  tasks:
+    - name: Install packages
+      ansible.builtin.yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - samba
+        - samba-common-tools
+        - realmd
+        - sssd
+        - sssd-tools
+        - adcli
+        - oddjob
+        - oddjob-mkhomedir
+
+    - import_tasks: tasks/ip_config.yml
+    
+    - name: Discover AD realm
+      ansible.builtin.command: >
+        realm discover -v {{ ad_domain }}
+      register: discover_r
+
+    - name: Debug discover result
+      ansible.builtin.debug:
+        var: discover_r.stderr_lines
+
+    - name: Join AD
+      ansible.builtin.command: >
+        realm join --user={{ ad_admin }} {{ ad_domain }}
+      args:
+        chdir: /
+        creates: "/etc/krb5.keytab"
+      register: join_r
+
+    - name: Debug join result
+      ansible.builtin.debug:
+        var: join_r.stderr_lines
+
+    - name: Create network folder
+      ansible.builtin.file: 
+        path: "/home/AD_FOLDER"
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
