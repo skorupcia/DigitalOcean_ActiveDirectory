@@ -22,10 +22,15 @@ Ubuntu: ubuntu-23-10-x64
 
 -- RUN INSTRUCTIONS --
 1. Run droplet yml: ansible-playbook -i hosts.ini droplet.yml
+   
    Playbook drops Active Directory server and initial user. It automatically creates inventory files (and adds ips) with recently created servers. Additionaly creates ip_vars.yml file that saves ours ip servers for the future playbooks.
-2. Run Active Directory server playbook: ansible-playbook -i hosts.ini ad.yml
+   
+3. Run Active Directory server playbook: ansible-playbook -i hosts.ini ad.yml
+   
    This Playbook installs required packages to become an AD and automatically make changes to DNS and network config files. It may requite additional server restart (sudo reboot). Besides that joins AD with admin user and creates network directory
-3. Run app.yml: ansible-playbook -i hosts.ini app.yml
+   
+5. Run app.yml: ansible-playbook -i hosts.ini app.yml
+   
    This Playbook installs required packages to join AD, joins AD server and adds recently created network directory
 
 -- Droplet Delete --
