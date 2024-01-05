@@ -1,5 +1,5 @@
 # DigitalOcean_ActiveDirectory
-/// IN PROGRESS \\\
+/// IN_PROGRESS \\\
 
 DigitalOcean ActiveDirectory with Centos-7 and Ubuntu
 
