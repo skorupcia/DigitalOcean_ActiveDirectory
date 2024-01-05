@@ -1,5 +1,5 @@
 # DigitalOcean_ActiveDirectory
-!!!!!IN PROGRESS!!!!!
+///// IN PROGRESS \\\\\
 DigitalOcean ActiveDirectory with Centos-7 and Ubuntu
 
 This repository also contains VagrantFile, with little adjustments you can try this on local environment.
