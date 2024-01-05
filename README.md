@@ -10,7 +10,6 @@ Centos: centos-7-x64
 
 Ubuntu: ubuntu-23-10-x64
 
-
 -- INSTRUCTIONS --
 1. Add your machine SSH to DigitalOcean account
 2. Update hosts file position
@@ -27,8 +26,6 @@ Ubuntu: ubuntu-23-10-x64
    
    d) Update ad_domain, realm_name and users with your personal preference
 
-
-
 -- RUN INSTRUCTIONS --
 1. Run droplet yml: ansible-playbook -i hosts.ini droplet.yml
    
@@ -42,7 +39,6 @@ Ubuntu: ubuntu-23-10-x64
    
    This Playbook installs required packages to join AD, joins AD server and adds recently created network directory
 
-
-
 -- Droplet Delete --
+
 If you would like to delete droplet, simply switch both states of "Create Digitalocean droplet" from PRESENT to ABSENT and run playbook.
