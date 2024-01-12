@@ -1,7 +1,6 @@
-# DigitalOcean_ActiveDirectory
-IN_PROGRES
+# IN_PROGRES DigitalOcean ActiveDirectory with Centos-7 and Ubuntu
 
-DigitalOcean ActiveDirectory with Centos-7 and Ubuntu
+## Specifications
 
 This repository also contains VagrantFile, with little adjustments you can try this on local environment.
 
@@ -11,7 +10,7 @@ Centos: centos-7-x64
 
 Ubuntu: ubuntu-23-10-x64
 
--- INSTRUCTIONS --
+## INSTRUCTIONS
 1. Add your machine SSH to DigitalOcean account
 2. Update hosts file position
    
@@ -27,7 +26,7 @@ Ubuntu: ubuntu-23-10-x64
    
    d) Update ad_domain, realm_name and users with your personal preference
 
--- RUN INSTRUCTIONS --
+## RUN INSTRUCTIONS
 1. Run droplet yml: ansible-playbook -i hosts.ini droplet.yml
    
    Playbook drops Active Directory server and initial user. It automatically creates inventory files (and adds ips) with recently created servers. Additionaly creates ip_vars.yml file that saves ours ip servers for the future playbooks.
@@ -40,11 +39,11 @@ Ubuntu: ubuntu-23-10-x64
    
    This Playbook installs required packages to join AD, joins AD server and adds recently created network directory
 
--- Droplet Delete --
+## Droplet Delete
 
 If you would like to delete droplet, simply switch both states of "Create Digitalocean droplet" from PRESENT to ABSENT and run playbook.
 
--- Links --
+## Links 
 
 https://askubuntu.com/questions/1109923/18-04-joining-ad-problems
 
