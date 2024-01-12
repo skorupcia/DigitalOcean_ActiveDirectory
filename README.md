@@ -1,4 +1,4 @@
-# IN_PROGRES DigitalOcean ActiveDirectory with Centos-7 and Ubuntu
+# IN_PROGRESS DigitalOcean ActiveDirectory with Centos-7 and Ubuntu
 
 ## Specifications
 
