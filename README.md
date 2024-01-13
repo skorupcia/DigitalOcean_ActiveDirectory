@@ -10,7 +10,7 @@ Centos: centos-7-x64
 
 Ubuntu: ubuntu-23-10-x64
 
-## INSTRUCTIONS
+## PRE-INSTRUCTIONS
 1. Add your machine SSH to DigitalOcean account
 2. Update hosts file position
    
